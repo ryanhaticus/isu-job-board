@@ -4,11 +4,13 @@ import { db } from '@/lib/mongodb';
 export type IUser = {
   name: string;
   email: string;
+  passwordHash: string;
 };
 
 const userSchema = new Schema<IUser>({
   name: { type: String, required: true },
   email: { type: String, required: true },
+  passwordHash: { type: String, required: true },
 });
 
 export const User: Model<IUser> =
