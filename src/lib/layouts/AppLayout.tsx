@@ -3,10 +3,10 @@ import { Dialog, Menu, Transition } from '@headlessui/react';
 import {
   Bars3Icon,
   BriefcaseIcon,
-  Cog6ToothIcon,
   DocumentIcon,
   HomeIcon,
   PlusCircleIcon,
+  UserIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import {
@@ -35,7 +35,7 @@ const navigation = [
   },
 ];
 const userNavigation = [
-  { name: 'My profile', href: '#' },
+  { name: 'My profile', href: '/profile' },
   { name: 'Sign out', href: '/api/users/signout' },
 ];
 
@@ -128,13 +128,13 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
                       </li>
                       <li className='mt-auto'>
                         <a
-                          href='#'
+                          href='/profile'
                           className='group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600'>
-                          <Cog6ToothIcon
+                          <UserIcon
                             className='h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600'
                             aria-hidden='true'
                           />
-                          Settings
+                          My Profile
                         </a>
                       </li>
                     </ul>
@@ -182,13 +182,13 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
               </li>
               <li className='mt-auto'>
                 <a
-                  href='#'
+                  href='/profile'
                   className='group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600'>
-                  <Cog6ToothIcon
+                  <UserIcon
                     className='h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600'
                     aria-hidden='true'
                   />
-                  Settings
+                  My Profile
                 </a>
               </li>
             </ul>
