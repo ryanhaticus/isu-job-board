@@ -1,10 +1,17 @@
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
+import Head from 'next/head';
 
-export default function App({ Component, pageProps }: AppProps) {
+const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
+      <Head>
+        <title>ISU Student Job Board</title>
+        <link rel='icon' type='image/svg+xml' href='/logo.svg' />
+      </Head>
       <Component {...pageProps} />
     </>
   );
-}
+};
+
+export default App;
