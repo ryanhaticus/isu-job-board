@@ -1,7 +1,7 @@
-import { atom } from 'jotai';
+import { atomWithStorage } from 'jotai/utils';
 import { ISession } from '@/lib/models/session';
 
-export const session = atom({
+export const session = atomWithStorage('session', {
   expires: Date.now(),
   token: '',
   userId: '',
