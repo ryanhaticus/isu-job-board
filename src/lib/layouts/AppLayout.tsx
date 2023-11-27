@@ -15,6 +15,8 @@ import {
 } from '@heroicons/react/20/solid';
 import { classNames } from '@/lib/util/tailwind';
 import { Logo } from '@/lib/components/Logo';
+import { useAtom } from 'jotai';
+import { search as searchAtom } from '@/lib/states/search';
 
 const navigation = [
   { name: 'Job Board', href: '/', icon: HomeIcon, current: true },
@@ -39,6 +41,7 @@ const userNavigation = [
 
 export const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [_, setSearch] = useAtom(searchAtom);
 
   return (
     <div className='min-h-screen'>
@@ -220,6 +223,11 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
                 placeholder='Search on page...'
                 type='search'
                 name='search'
+                onChange={(e) =>
+                  setSearch({
+                    query: e.target.value,
+                  })
+                }
               />
             </form>
             <div className='flex items-center gap-x-4 lg:gap-x-6'>
