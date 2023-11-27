@@ -1,47 +1,90 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Menu, Transition } from '@headlessui/react';
+
 import {
   Bars3Icon,
   BriefcaseIcon,
   DocumentIcon,
   HomeIcon,
   PlusCircleIcon,
+  UserCircleIcon,
   UserIcon,
+  UserPlusIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/20/solid';
+
 import { classNames } from '@/lib/util/tailwind';
 import { Logo } from '@/lib/components/Logo';
+
 import { useAtom } from 'jotai';
 import { search as searchAtom } from '@/lib/states/search';
+import { session as sessionAtom } from '@/lib/states/session';
+import { user as userAtom } from '@/lib/states/user';
+import { useRouter } from 'next/router';
+
+type AccessType = 'AUTHENTICATED' | 'UNAUTHENTICATED' | 'ALL';
 
 const navigation = [
-  { name: 'Job Board', href: '/', icon: HomeIcon, current: true },
+  { name: 'Job Board', href: '/', icon: HomeIcon, accessType: 'ALL' },
   {
     name: 'My Applications',
     href: '/applications',
     icon: DocumentIcon,
-    current: false,
+    accessType: 'AUTHENTICATED',
   },
-  { name: 'My Jobs', href: '/jobs', icon: BriefcaseIcon, current: false },
+  {
+    name: 'My Jobs',
+    href: '/jobs',
+    icon: BriefcaseIcon,
+    accessType: 'AUTHENTICATED',
+  },
   {
     name: 'Post a Job',
     href: '/jobs/new',
     icon: PlusCircleIcon,
-    current: false,
+    accessType: 'AUTHENTICATED',
   },
-];
+  {
+    name: 'Sign in',
+    href: '/auth/signin',
+    icon: UserCircleIcon,
+    accessType: 'UNAUTHENTICATED',
+  },
+  {
+    name: 'Sign up',
+    href: '/auh/signup',
+    icon: UserPlusIcon,
+    accessType: 'UNAUTHENTICATED',
+  },
+] satisfies {
+  name: string;
+  href: string;
+  icon: any;
+  accessType: AccessType;
+}[];
+
 const userNavigation = [
   { name: 'My profile', href: '/profile' },
-  { name: 'Sign out', href: '/api/users/signout' },
+  { name: 'Sign out', href: '/auth/signout' },
 ];
 
 export const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
   const [_, setSearch] = useAtom(searchAtom);
+  const [session] = useAtom(sessionAtom);
+  const [user] = useAtom(userAtom);
+
+  const { pathname } = useRouter();
+
+  const accessType: AccessType =
+    session && session.expires > Date.now()
+      ? 'AUTHENTICATED'
+      : 'UNAUTHENTICATED';
 
   return (
     <div className='min-h-screen'>
@@ -101,42 +144,50 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
                     <ul role='list' className='flex flex-1 flex-col gap-y-7'>
                       <li>
                         <ul role='list' className='-mx-2 space-y-1'>
-                          {navigation.map((item) => (
-                            <li key={item.name}>
-                              <a
-                                href={item.href}
-                                className={classNames(
-                                  item.current
-                                    ? 'bg-gray-50 text-indigo-600'
-                                    : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
-                                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
-                                )}>
-                                <item.icon
+                          {navigation
+                            .filter(
+                              (item) =>
+                                item.accessType === accessType ||
+                                item.accessType === 'ALL',
+                            )
+                            .map((item) => (
+                              <li key={item.name}>
+                                <a
+                                  href={item.href}
                                   className={classNames(
-                                    item.current
-                                      ? 'text-indigo-600'
-                                      : 'text-gray-400 group-hover:text-indigo-600',
-                                    'h-6 w-6 shrink-0',
-                                  )}
-                                  aria-hidden='true'
-                                />
-                                {item.name}
-                              </a>
-                            </li>
-                          ))}
+                                    item.href === pathname
+                                      ? 'bg-gray-50 text-indigo-600'
+                                      : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
+                                  )}>
+                                  <item.icon
+                                    className={classNames(
+                                      item.href === pathname
+                                        ? 'text-indigo-600'
+                                        : 'text-gray-400 group-hover:text-indigo-600',
+                                      'h-6 w-6 shrink-0',
+                                    )}
+                                    aria-hidden='true'
+                                  />
+                                  {item.name}
+                                </a>
+                              </li>
+                            ))}
                         </ul>
                       </li>
-                      <li className='mt-auto'>
-                        <a
-                          href='/profile'
-                          className='group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600'>
-                          <UserIcon
-                            className='h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600'
-                            aria-hidden='true'
-                          />
-                          My Profile
-                        </a>
-                      </li>
+                      {accessType === 'AUTHENTICATED' ? (
+                        <li className='mt-auto'>
+                          <a
+                            href='/profile'
+                            className='group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600'>
+                            <UserIcon
+                              className='h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600'
+                              aria-hidden='true'
+                            />
+                            My Profile
+                          </a>
+                        </li>
+                      ) : null}
                     </ul>
                   </nav>
                 </div>
@@ -155,42 +206,50 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
             <ul role='list' className='flex flex-1 flex-col gap-y-7'>
               <li>
                 <ul role='list' className='-mx-2 space-y-1'>
-                  {navigation.map((item) => (
-                    <li key={item.name}>
-                      <a
-                        href={item.href}
-                        className={classNames(
-                          item.current
-                            ? 'bg-gray-50 text-indigo-600'
-                            : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
-                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
-                        )}>
-                        <item.icon
+                  {navigation
+                    .filter(
+                      (item) =>
+                        item.accessType === accessType ||
+                        item.accessType === 'ALL',
+                    )
+                    .map((item) => (
+                      <li key={item.name}>
+                        <a
+                          href={item.href}
                           className={classNames(
-                            item.current
-                              ? 'text-indigo-600'
-                              : 'text-gray-400 group-hover:text-indigo-600',
-                            'h-6 w-6 shrink-0',
-                          )}
-                          aria-hidden='true'
-                        />
-                        {item.name}
-                      </a>
-                    </li>
-                  ))}
+                            item.href === pathname
+                              ? 'bg-gray-50 text-indigo-600'
+                              : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
+                          )}>
+                          <item.icon
+                            className={classNames(
+                              item.href === pathname
+                                ? 'text-indigo-600'
+                                : 'text-gray-400 group-hover:text-indigo-600',
+                              'h-6 w-6 shrink-0',
+                            )}
+                            aria-hidden='true'
+                          />
+                          {item.name}
+                        </a>
+                      </li>
+                    ))}
                 </ul>
               </li>
-              <li className='mt-auto'>
-                <a
-                  href='/profile'
-                  className='group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600'>
-                  <UserIcon
-                    className='h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600'
-                    aria-hidden='true'
-                  />
-                  My Profile
-                </a>
-              </li>
+              {accessType === 'AUTHENTICATED' ? (
+                <li className='mt-auto'>
+                  <a
+                    href='/profile'
+                    className='group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600'>
+                    <UserIcon
+                      className='h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600'
+                      aria-hidden='true'
+                    />
+                    My Profile
+                  </a>
+                </li>
+              ) : null}
             </ul>
           </nav>
         </div>
@@ -230,59 +289,61 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
                 }
               />
             </form>
-            <div className='flex items-center gap-x-4 lg:gap-x-6'>
-              <div
-                className='hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200'
-                aria-hidden='true'
-              />
+            {accessType === 'AUTHENTICATED' ? (
+              <div className='flex items-center gap-x-4 lg:gap-x-6'>
+                <div
+                  className='hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200'
+                  aria-hidden='true'
+                />
 
-              <Menu as='div' className='relative'>
-                <Menu.Button className='-m-1.5 flex items-center p-1.5'>
-                  <span className='sr-only'>Open user menu</span>
-                  <img
-                    className='h-8 w-8 rounded-full bg-gray-50'
-                    src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                    alt=''
-                  />
-                  <span className='hidden lg:flex lg:items-center'>
-                    <span
-                      className='ml-4 text-sm font-semibold leading-6 text-gray-900'
-                      aria-hidden='true'>
-                      Tom Cook
-                    </span>
-                    <ChevronDownIcon
-                      className='ml-2 h-5 w-5 text-gray-400'
-                      aria-hidden='true'
+                <Menu as='div' className='relative'>
+                  <Menu.Button className='-m-1.5 flex items-center p-1.5'>
+                    <span className='sr-only'>Open user menu</span>
+                    <img
+                      className='h-8 w-8 rounded-full bg-gray-50'
+                      src='/profile.jpeg'
+                      alt='Cy the Cardinal'
                     />
-                  </span>
-                </Menu.Button>
-                <Transition
-                  as={Fragment}
-                  enter='transition ease-out duration-100'
-                  enterFrom='transform opacity-0 scale-95'
-                  enterTo='transform opacity-100 scale-100'
-                  leave='transition ease-in duration-75'
-                  leaveFrom='transform opacity-100 scale-100'
-                  leaveTo='transform opacity-0 scale-95'>
-                  <Menu.Items className='absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none'>
-                    {userNavigation.map((item) => (
-                      <Menu.Item key={item.name}>
-                        {({ active }) => (
-                          <a
-                            href={item.href}
-                            className={classNames(
-                              active ? 'bg-gray-50' : '',
-                              'block px-3 py-1 text-sm leading-6 text-gray-900',
-                            )}>
-                            {item.name}
-                          </a>
-                        )}
-                      </Menu.Item>
-                    ))}
-                  </Menu.Items>
-                </Transition>
-              </Menu>
-            </div>
+                    <span className='hidden lg:flex lg:items-center'>
+                      <span
+                        className='ml-4 text-sm font-semibold leading-6 text-gray-900'
+                        aria-hidden='true'>
+                        {user.firstName} {user.lastName}
+                      </span>
+                      <ChevronDownIcon
+                        className='ml-2 h-5 w-5 text-gray-400'
+                        aria-hidden='true'
+                      />
+                    </span>
+                  </Menu.Button>
+                  <Transition
+                    as={Fragment}
+                    enter='transition ease-out duration-100'
+                    enterFrom='transform opacity-0 scale-95'
+                    enterTo='transform opacity-100 scale-100'
+                    leave='transition ease-in duration-75'
+                    leaveFrom='transform opacity-100 scale-100'
+                    leaveTo='transform opacity-0 scale-95'>
+                    <Menu.Items className='absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none'>
+                      {userNavigation.map((item) => (
+                        <Menu.Item key={item.name}>
+                          {({ active }) => (
+                            <a
+                              href={item.href}
+                              className={classNames(
+                                active ? 'bg-gray-50' : '',
+                                'block px-3 py-1 text-sm leading-6 text-gray-900',
+                              )}>
+                              {item.name}
+                            </a>
+                          )}
+                        </Menu.Item>
+                      ))}
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
+              </div>
+            ) : null}
           </div>
         </div>
 
