@@ -1,8 +1,9 @@
-import '@/styles/globals.css';
+import '@/lib/styles/globals.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 
 import { Provider as JotaiProvider } from 'jotai';
+import { AppLayout } from '@/lib/layouts/AppLayout';
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -12,7 +13,9 @@ const App = ({ Component, pageProps }: AppProps) => {
         <link rel='icon' type='image/svg+xml' href='/logo.svg' />
       </Head>
       <JotaiProvider>
-        <Component {...pageProps} />
+        <AppLayout>
+          <Component {...pageProps} />
+        </AppLayout>
       </JotaiProvider>
     </>
   );
