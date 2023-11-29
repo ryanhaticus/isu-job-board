@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import { db } from '@/lib/mongodb';
+import { db } from '../mongodb';
 
 const jobPostSchema = new Schema({
   position: { type: String, required: true },

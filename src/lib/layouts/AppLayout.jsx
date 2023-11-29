@@ -17,13 +17,13 @@ import {
   MagnifyingGlassIcon,
 } from '@heroicons/react/20/solid';
 
-import { classNames } from '@/lib/util/tailwind';
-import { Logo } from '@/lib/components/Logo';
+import { classNames } from '../util/tailwind';
+import { Logo } from '../components/Logo';
 
 import { useAtom } from 'jotai';
-import { search as searchAtom } from '@/lib/states/search';
-import { session as sessionAtom } from '@/lib/states/session';
-import { user as userAtom } from '@/lib/states/user';
+import { search as searchAtom } from '../states/search';
+import { session as sessionAtom } from '../states/session';
+import { user as userAtom } from '../states/user';
 import { useRouter } from 'next/router';
 
 const navigation = [

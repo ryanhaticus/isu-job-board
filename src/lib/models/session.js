@@ -1,5 +1,5 @@
 import mongoose, { Schema, Model } from 'mongoose';
-import { db } from '@/lib/mongodb';
+import { db } from '../mongodb';
 
 const sessionSchema = new Schema({
   expires: { type: Number, required: true },

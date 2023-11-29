@@ -1,8 +1,8 @@
-import '@/lib/styles/globals.css';
+import '../lib/styles/globals.css';
 import Head from 'next/head';
 
 import { Provider as JotaiProvider } from 'jotai';
-import { AppLayout } from '@/lib/layouts/AppLayout';
+import { AppLayout } from '../lib/layouts/AppLayout';
 
 const App = ({ Component, pageProps }) => {
   return (
