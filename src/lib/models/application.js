@@ -2,10 +2,10 @@ import mongoose, { Schema } from 'mongoose';
 import { db } from '../mongodb';
 
 const applicationSchema = new Schema({
-  jobId: { type: String, required: true },
+  jobPostId: { type: String, required: true },
   ownerId: { type: String, required: true },
-  status: { type: String, required: true },
+  status: { type: String, required: true }, // under_review, accepted, rejected
 });
 
 export const Application =
-  mongoose.models.User || db.model('Application', applicationSchema);
+  mongoose.models.Application || db.model('Application', applicationSchema);

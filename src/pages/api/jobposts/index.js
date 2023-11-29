@@ -1,5 +1,5 @@
-import { JobPost } from '../../lib/models/jobpost';
-import { getUserIdFromToken } from '../../lib/util/jwt';
+import { JobPost } from '../../../lib/models/jobpost';
+import { getUserIdFromToken } from '../../../lib/util/jwt';
 
 const handler = async (req, res) => {
   if (req.method === 'GET') {

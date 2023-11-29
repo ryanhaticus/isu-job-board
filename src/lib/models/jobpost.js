@@ -8,4 +8,4 @@ const jobPostSchema = new Schema({
 });
 
 export const JobPost =
-  mongoose.models.User || db.model('JobPost', jobPostSchema);
+  mongoose.models.JobPost || db.model('JobPost', jobPostSchema);
