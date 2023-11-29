@@ -6,7 +6,7 @@ const userSchema = new Schema({
   lastName: { type: String, required: true },
   desiredPosition: { type: String, required: true },
   salaryExpectation: { type: Number, required: true },
-  resume: { type: String, required: true },
+  resume: { type: String, required: false },
   email: { type: String, required: true },
   passwordHash: { type: String, required: true },
 });

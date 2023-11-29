@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     const { id } = req.query;
 
     if (!id || Array.isArray(id)) {
-      return res.status(400).json({ message: 'Invalid user ID' });
+      return res.status(400).json({ message: 'User not found' });
     }
 
     // Fetch the user by ID
