@@ -1,5 +1,5 @@
-import { User } from '../../../lib/models/user';
-import { getUserIdFromToken } from '../../../lib/util/jwt';
+import { User } from '../../lib/models/user';
+import { getUserIdFromToken } from '../../lib/util/jwt';
 
 export default async function handler(req, res) {
   try {

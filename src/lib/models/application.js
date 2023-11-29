@@ -7,5 +7,5 @@ const applicationSchema = new Schema({
   status: { type: String, required: true },
 });
 
-export const User =
+export const Application =
   mongoose.models.User || db.model('Application', applicationSchema);

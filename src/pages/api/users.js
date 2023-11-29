@@ -1,4 +1,4 @@
-import { User } from '../../../lib/models/user';
+import { User } from '../../lib/models/user';
 import bcrypt from 'bcrypt';
 
 export default async function handler(req, res) {

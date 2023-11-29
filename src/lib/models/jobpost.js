@@ -7,4 +7,5 @@ const jobPostSchema = new Schema({
   ownerId: { type: String, required: true },
 });
 
-export const User = mongoose.models.User || db.model('JobPost', jobPostSchema);
+export const JobPost =
+  mongoose.models.User || db.model('JobPost', jobPostSchema);
