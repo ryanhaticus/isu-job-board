@@ -1,15 +1,15 @@
 import { User } from '../../../lib/models/user';
+import { getUserIdFromToken } from '../../../lib/util/jwt';
 
 export default async function handler(req, res) {
   try {
-    const { id } = req.query;
-
-    if (!id || Array.isArray(id)) {
-      return res.status(400).json({ message: 'User not found' });
-    }
-
-    // Fetch the user by ID
     if (req.method === 'GET') {
+      const id = await getUserIdFromToken(req);
+
+      if (!id) {
+        return res.status(401).json({ message: 'Not authenticated' });
+      }
+
       const user = await User.findById(id);
 
       if (!user) {
