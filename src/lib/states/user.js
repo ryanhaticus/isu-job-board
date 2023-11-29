@@ -1,7 +1,6 @@
 import { atom } from 'jotai';
-import { IUser } from '@/lib/models/user';
 
-export const user = atom<IUser>({
+export const user = atom({
   firstName: '',
   lastName: '',
   email: '',

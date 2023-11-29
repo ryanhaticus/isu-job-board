@@ -1,11 +1,10 @@
 import '@/lib/styles/globals.css';
-import type { AppProps } from 'next/app';
 import Head from 'next/head';
 
 import { Provider as JotaiProvider } from 'jotai';
 import { AppLayout } from '@/lib/layouts/AppLayout';
 
-const App = ({ Component, pageProps }: AppProps) => {
+const App = ({ Component, pageProps }) => {
   return (
     <>
       <Head>

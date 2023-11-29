@@ -1,17 +1,7 @@
-import mongoose, { Schema, Model } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import { db } from '@/lib/mongodb';
 
-export type IUser = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  passwordHash: string;
-  desiredPosition: string;
-  salaryExpectation: number;
-  resume: string;
-};
-
-const userSchema = new Schema<IUser>({
+const userSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   desiredPosition: { type: String, required: true },
@@ -21,5 +11,4 @@ const userSchema = new Schema<IUser>({
   passwordHash: { type: String, required: true },
 });
 
-export const User: Model<IUser> =
-  mongoose.models.User || db.model<IUser>('User', userSchema);
+export const User = mongoose.models.User || db.model('User', userSchema);

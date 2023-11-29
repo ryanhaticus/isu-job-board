@@ -26,8 +26,6 @@ import { session as sessionAtom } from '@/lib/states/session';
 import { user as userAtom } from '@/lib/states/user';
 import { useRouter } from 'next/router';
 
-type AccessType = 'AUTHENTICATED' | 'UNAUTHENTICATED' | 'ALL';
-
 const navigation = [
   { name: 'Job Board', href: '/', icon: HomeIcon, accessType: 'ALL' },
   {
@@ -60,19 +58,14 @@ const navigation = [
     icon: UserPlusIcon,
     accessType: 'UNAUTHENTICATED',
   },
-] satisfies {
-  name: string;
-  href: string;
-  icon: any;
-  accessType: AccessType;
-}[];
+];
 
 const userNavigation = [
   { name: 'My profile', href: '/profile' },
   { name: 'Sign out', href: '/auth/signout' },
 ];
 
-export const AppLayout = ({ children }: { children: React.ReactNode }) => {
+export const AppLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [_, setSearch] = useAtom(searchAtom);
@@ -81,7 +74,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
 
   const { pathname } = useRouter();
 
-  const accessType: AccessType =
+  const accessType =
     session && session.expires > Date.now()
       ? 'AUTHENTICATED'
       : 'UNAUTHENTICATED';
