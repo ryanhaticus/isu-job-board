@@ -1,10 +1,7 @@
-import { connectToDatabase } from '../../lib/mongodb';
-import { IUser, User } from '../../lib/models/user';
+import { User } from '../../lib/models/user';
 
 export default async function handler(req, res) {
   try {
-    const db = await connectToDatabase();
-
     if (req.method === 'POST') {
       const user = new User(req.body);
       await user.save();

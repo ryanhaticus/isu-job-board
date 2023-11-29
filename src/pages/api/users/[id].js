@@ -1,9 +1,7 @@
-import { connectToDatabase } from '../../../lib/mongodb';
 import { User } from '../../../lib/models/user';
 
 export default async function handler(req, res) {
   try {
-    const db = await connectToDatabase();
     const { id } = req.query;
 
     if (!id || Array.isArray(id)) {
