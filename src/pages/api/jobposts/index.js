@@ -9,7 +9,7 @@ const handler = async (req, res) => {
   }
 
   if (req.method === 'POST') {
-    const id = await getUserIdFromToken(req);
+    const id = getUserIdFromToken(req);
 
     if (!id) {
       return res.status(401).json({ message: 'Not authenticated' });

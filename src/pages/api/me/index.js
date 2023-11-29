@@ -4,7 +4,7 @@ import { getUserIdFromToken } from '../../../lib/util/jwt';
 export default async function handler(req, res) {
   try {
     if (req.method === 'GET') {
-      const id = await getUserIdFromToken(req);
+      const id = getUserIdFromToken(req);
 
       if (!id) {
         return res.status(401).json({ message: 'Not authenticated' });
