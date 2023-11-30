@@ -13,11 +13,13 @@ export const getUserIdFromToken = (req) => {
     return null;
   }
 
-  return jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (!err && decoded) {
-      return decoded.userId;
-    }
+  let uid = null;
 
-    return null;
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (!err && decoded) {
+      uid = decoded.userId;
+    }
   });
+
+  return uid;
 };

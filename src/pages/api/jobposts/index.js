@@ -20,7 +20,13 @@ const handler = async (req, res) => {
       ownerId: id,
     });
 
-    await jobPost.save();
+    try {
+      await jobPost.save();
+    } catch (e) {
+      return res.status(400).json({
+        message: 'One or more fields were empty or of an incorrect format',
+      });
+    }
 
     return res.status(201).json(jobPost);
   }

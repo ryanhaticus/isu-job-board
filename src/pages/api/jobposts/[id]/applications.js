@@ -60,7 +60,13 @@ const handler = async (req, res) => {
       ownerId: id,
     });
 
-    await application.save();
+    try {
+      await application.save();
+    } catch {
+      return res.status(400).json({
+        message: 'One or more fields were empty or of an incorrect format',
+      });
+    }
 
     return res.status(201).json(application);
   }

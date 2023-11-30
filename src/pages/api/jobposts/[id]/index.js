@@ -24,7 +24,7 @@ const handler = async (req, res) => {
     return res.status(401).json({ message: 'Not authorized' });
   }
 
-  await jobPost.remove();
+  await JobPost.findByIdAndDelete(jobPostId);
 
   return res.status(200).json(jobPost);
 };

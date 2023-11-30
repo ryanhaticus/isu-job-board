@@ -12,7 +12,7 @@ const handler = async (req, res) => {
     return res.status(401).json({ message: 'Not authenticated' });
   }
 
-  const jobposts = JobPost.find({ ownerId: id });
+  const jobposts = await JobPost.find({ ownerId: id });
 
   res.status(200).json(jobposts);
 };

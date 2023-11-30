@@ -23,7 +23,13 @@ export default async function handler(req, res) {
         ...req.body,
         passwordHash,
       });
-      await user.save();
+      try {
+        await user.save();
+      } catch {
+        return res.status(400).json({
+          message: 'One or more fields were empty or of an incorrect format',
+        });
+      }
       res.status(201).json(user);
     } else {
       res.status(405).end(`Method ${req.method} Not Allowed`);

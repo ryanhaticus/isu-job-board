@@ -25,6 +25,8 @@ import { search as searchAtom } from '../states/search';
 import { session as sessionAtom } from '../states/session';
 import { user as userAtom } from '../states/user';
 import { useRouter } from 'next/router';
+import { usePageTitle } from '../hooks/usePageTitle';
+import Link from 'next/link';
 
 const navigation = [
   { name: 'Job Board', href: '/', icon: HomeIcon, accessType: 'ALL' },
@@ -54,7 +56,7 @@ const navigation = [
   },
   {
     name: 'Sign up',
-    href: '/auh/signup',
+    href: '/auth/signup',
     icon: UserPlusIcon,
     accessType: 'UNAUTHENTICATED',
   },
@@ -78,6 +80,8 @@ export const AppLayout = ({ children }) => {
     session && session.expires > Date.now()
       ? 'AUTHENTICATED'
       : 'UNAUTHENTICATED';
+
+  const pageTitle = usePageTitle();
 
   return (
     <div className='min-h-screen'>
@@ -145,7 +149,7 @@ export const AppLayout = ({ children }) => {
                             )
                             .map((item) => (
                               <li key={item.name}>
-                                <a
+                                <Link
                                   href={item.href}
                                   className={classNames(
                                     item.href === pathname
@@ -163,14 +167,14 @@ export const AppLayout = ({ children }) => {
                                     aria-hidden='true'
                                   />
                                   {item.name}
-                                </a>
+                                </Link>
                               </li>
                             ))}
                         </ul>
                       </li>
                       {accessType === 'AUTHENTICATED' ? (
                         <li className='mt-auto'>
-                          <a
+                          <Link
                             href='/profile'
                             className='group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600'>
                             <UserIcon
@@ -178,7 +182,7 @@ export const AppLayout = ({ children }) => {
                               aria-hidden='true'
                             />
                             My Profile
-                          </a>
+                          </Link>
                         </li>
                       ) : null}
                     </ul>
@@ -207,7 +211,7 @@ export const AppLayout = ({ children }) => {
                     )
                     .map((item) => (
                       <li key={item.name}>
-                        <a
+                        <Link
                           href={item.href}
                           className={classNames(
                             item.href === pathname
@@ -225,14 +229,14 @@ export const AppLayout = ({ children }) => {
                             aria-hidden='true'
                           />
                           {item.name}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                 </ul>
               </li>
               {accessType === 'AUTHENTICATED' ? (
                 <li className='mt-auto'>
-                  <a
+                  <Link
                     href='/profile'
                     className='group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600'>
                     <UserIcon
@@ -240,7 +244,7 @@ export const AppLayout = ({ children }) => {
                       aria-hidden='true'
                     />
                     My Profile
-                  </a>
+                  </Link>
                 </li>
               ) : null}
             </ul>
@@ -321,14 +325,14 @@ export const AppLayout = ({ children }) => {
                       {userNavigation.map((item) => (
                         <Menu.Item key={item.name}>
                           {({ active }) => (
-                            <a
+                            <Link
                               href={item.href}
                               className={classNames(
                                 active ? 'bg-gray-50' : '',
                                 'block px-3 py-1 text-sm leading-6 text-gray-900',
                               )}>
                               {item.name}
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                       ))}
@@ -341,7 +345,10 @@ export const AppLayout = ({ children }) => {
         </div>
 
         <main className='py-8'>
-          <div className='px-4 sm:px-6 lg:px-8'>{children}</div>
+          <div className='px-4 sm:px-6 lg:px-8'>
+            <h1 className='text-3xl'>{pageTitle}</h1>
+            <div className='mt-2'>{children}</div>
+          </div>
         </main>
       </div>
     </div>

@@ -25,7 +25,7 @@ const handler = async (req, res) => {
       return res.status(404).json({ message: 'Job post not found' });
     }
 
-    if (jobPost.ownerId !== id) {
+    if (jobPost.ownerId !== id && application.ownerId !== id) {
       return res.status(401).json({ message: 'Not authorized' });
     }
 
@@ -35,7 +35,13 @@ const handler = async (req, res) => {
       application.status = status;
     }
 
-    await application.save();
+    try {
+      await application.save();
+    } catch {
+      return res.status(400).json({
+        message: 'One or more fields were empty or of an incorrect format',
+      });
+    }
 
     return res.status(200).json(application);
   }
@@ -59,7 +65,7 @@ const handler = async (req, res) => {
       return res.status(401).json({ message: 'Not authorized' });
     }
 
-    await application.remove();
+    await Application.findByIdAndDelete(applicationId);
 
     return res.status(200).json({ message: 'Application deleted' });
   }
