@@ -10,6 +10,7 @@ import {
   UserCircleIcon,
   UserIcon,
   UserPlusIcon,
+  UsersIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import {
@@ -60,6 +61,12 @@ const navigation = [
     icon: UserPlusIcon,
     accessType: 'UNAUTHENTICATED',
   },
+  {
+    name: 'Developer Info',
+    href: '/studentinfo',
+    icon: UsersIcon,
+    accessType: 'ALL'
+  }
 ];
 
 const userNavigation = [

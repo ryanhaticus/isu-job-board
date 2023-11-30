@@ -20,6 +20,8 @@ export const usePageTitle = () => {
       return 'All Jobs';
     case '/jobs/new':
       return 'New Job';
+    case '/studentinfo':
+      return 'Student Info'
   }
 
   if (router.pathname.startsWith('/jobs/')) {
