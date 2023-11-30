@@ -25,18 +25,20 @@ const handler = async (req, res) => {
 
     const applications = await Application.find({ jobPostId });
 
-    applications.map(async (application) => {
-      const user = await User.findById(application.ownerId);
+    const mappedApplications = await Promise.all(
+      applications.map(async (application) => {
+        const user = await User.findById(application.ownerId);
 
-      delete user.passwordHash;
+        delete user.passwordHash;
 
-      return {
-        ...application,
-        user,
-      };
-    });
+        return {
+          application,
+          user,
+        };
+      }),
+    );
 
-    return res.status(200).json(applications);
+    return res.status(200).json(mappedApplications);
   }
 
   if (req.method === 'POST') {

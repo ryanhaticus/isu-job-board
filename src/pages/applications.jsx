@@ -1,6 +1,7 @@
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { session as sessionAtom } from '../lib/states/session';
+import { search as searchAtom } from '../lib/states/search';
 import { XCircleIcon } from '@heroicons/react/20/solid';
 import { Error } from '../lib/components/Error';
 import { Info } from '../lib/components/Info';
@@ -10,6 +11,7 @@ const MyApplications = () => {
   const [applications, setApplications] = useState([]);
   const [session] = useAtom(sessionAtom);
   const [error, setError] = useState('');
+  const [search] = useAtom(searchAtom);
 
   useEffect(() => {
     (async () => {
@@ -78,6 +80,20 @@ const MyApplications = () => {
     toast.success('Application withdrawn successfully.');
   };
 
+  const filteredApplications = applications.filter((app) => {
+    const query = search.query.toLowerCase();
+
+    if (!query) {
+      return true;
+    }
+
+    return (
+      app.company.toLowerCase().includes(query) ||
+      app.position.toLowerCase().includes(query) ||
+      app.status.toLowerCase().includes(query)
+    );
+  });
+
   return (
     <div>
       <Error message={error} />
@@ -87,7 +103,7 @@ const MyApplications = () => {
       <ul
         role='list'
         className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
-        {applications.map((app) => (
+        {filteredApplications.map((app) => (
           <li
             key={app._id}
             className='border col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow'>

@@ -1,6 +1,7 @@
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { session as sessionAtom } from '../lib/states/session';
+import { search as searchAtom } from '../lib/states/search';
 import { PaperAirplaneIcon } from '@heroicons/react/20/solid';
 import { Info } from '../lib/components/Info';
 import { toast } from 'react-toastify';
@@ -9,6 +10,8 @@ const Index = () => {
   const [jobs, setJobs] = useState([]);
   const [applications, setApplications] = useState([]);
   const [session] = useAtom(sessionAtom);
+
+  const [search] = useAtom(searchAtom);
 
   useEffect(() => {
     (async () => {
@@ -64,6 +67,19 @@ const Index = () => {
     toast.success('Application sent successfully using your profile!');
   };
 
+  const filteredJobs = jobs.filter((job) => {
+    const query = search.query.toLowerCase();
+
+    if (!query) {
+      return true;
+    }
+
+    return (
+      job.company.toLowerCase().includes(query) ||
+      job.position.toLowerCase().includes(query)
+    );
+  });
+
   return (
     <div>
       {jobs.length === 0 && (
@@ -72,7 +88,7 @@ const Index = () => {
       <ul
         role='list'
         className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
-        {jobs.map((job) => (
+        {filteredJobs.map((job) => (
           <li
             key={job._id}
             className='border col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow'>

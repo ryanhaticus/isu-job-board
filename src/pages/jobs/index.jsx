@@ -1,6 +1,7 @@
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { session as sessionAtom } from '../../lib/states/session';
+import { search as searchAtom } from '../../lib/states/search';
 import Link from 'next/link';
 import { EyeIcon, XCircleIcon } from '@heroicons/react/20/solid';
 import { Error } from '../../lib/components/Error';
@@ -11,6 +12,21 @@ const MyJobs = () => {
   const [jobs, setJobs] = useState([]);
   const [session] = useAtom(sessionAtom);
   const [error, setError] = useState('');
+
+  const [search] = useAtom(searchAtom);
+
+  const filteredJobs = jobs.filter((job) => {
+    const query = search.query;
+
+    if (!query) {
+      return true;
+    }
+
+    return (
+      job.company.toLowerCase().includes(query.toLowerCase()) ||
+      job.position.toLowerCase().includes(query.toLowerCase())
+    );
+  });
 
   useEffect(() => {
     (async () => {
@@ -72,7 +88,7 @@ const MyJobs = () => {
       <ul
         role='list'
         className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
-        {jobs.map((job) => (
+        {filteredJobs.map((job) => (
           <li
             key={job._id}
             className='border col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow'>
