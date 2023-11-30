@@ -1,38 +1,29 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Student Job Board
 
-## Getting Started
+## Overview
 
-First, run the development server:
+In August 2023, Iowa State University transitioned away from using AccessPlus for their centralized student dashboard. This change led to the discontinuation of the widely-used Student Job Board. Recognizing the importance of this resource, this project aims to create a new Student Job Board platform. This platform will connect employers with students, allowing job postings, job searches, and initial job application processes to be streamlined and accessible.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## Importance
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The Ivy College of Business, the College of Human Sciences, and the Department of Kinesiology at Iowa State University require internships or co-op positions for graduation. Moreover, students in fields such as Computer Science and Software Engineering greatly benefit from these opportunities in terms of employment rates post-graduation. Therefore, the reestablishment of the Student Job Board is not just beneficial but essential for the success of many students.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Goals
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- Increase in student employment rates following graduation.
+- Increasing the number of students who boast practical experience upon graduation.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- git clone [https://github.com/your-repository/student-job-board.git](https://github.com/ryanhaticus/isu-job-board.git)
+- cd student-job-board
+- npm install
 
-## Learn More
+## Usage
 
-To learn more about Next.js, take a look at the following resources:
+- npm start
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contact
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+jcluse@iastate.edu \\
+rhuellen@iastate.edu
