@@ -18,6 +18,7 @@ The Ivy College of Business, the College of Human Sciences, and the Department o
 - git clone [https://github.com/your-repository/student-job-board.git](https://github.com/ryanhaticus/isu-job-board.git)
 - cd student-job-board
 - npm install
+- npm build
 
 ## Usage
 
