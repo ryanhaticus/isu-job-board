@@ -4,6 +4,7 @@ import { session as sessionAtom } from '../../lib/states/session';
 import { user as userAtom } from '../../lib/states/user';
 import { useRouter } from 'next/router';
 import { Error } from '../../lib/components/Error';
+import { toast } from 'react-toastify';
 
 const Signin = () => {
   const [email, setEmail] = useState('');
@@ -50,6 +51,8 @@ const Signin = () => {
     const user = await userReq.json();
 
     setUser(user);
+
+    toast.success('Signed in successfully! Redirecting...');
 
     router.push('/');
   };

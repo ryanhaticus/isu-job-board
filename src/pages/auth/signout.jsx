@@ -2,6 +2,7 @@ import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import { session as sessionAtom } from '../../lib/states/session';
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const Signout = () => {
   const [_, setSession] = useAtom(sessionAtom);
@@ -14,6 +15,8 @@ const Signout = () => {
     });
 
     router.push('/');
+
+    toast.success('Signed out successfully! Redirecting...');
   }, []);
 
   return "Please wait while you're being signed out!";
