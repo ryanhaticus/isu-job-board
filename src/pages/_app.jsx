@@ -1,8 +1,11 @@
 import '../lib/styles/globals.css';
+import 'react-toastify/dist/ReactToastify.css';
+
 import Head from 'next/head';
 
 import { Provider as JotaiProvider } from 'jotai';
 import { AppLayout } from '../lib/layouts/AppLayout';
+import { ToastContainer } from 'react-toastify';
 
 const App = ({ Component, pageProps }) => {
   return (
@@ -15,6 +18,7 @@ const App = ({ Component, pageProps }) => {
         <AppLayout>
           <Component {...pageProps} />
         </AppLayout>
+        <ToastContainer position='bottom-right' />
       </JotaiProvider>
     </>
   );

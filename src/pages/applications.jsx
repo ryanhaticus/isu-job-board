@@ -1,9 +1,10 @@
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { session as sessionAtom } from '../lib/states/session';
-import { EyeIcon, XCircleIcon } from '@heroicons/react/20/solid';
+import { XCircleIcon } from '@heroicons/react/20/solid';
 import { Error } from '../lib/components/Error';
 import { Info } from '../lib/components/Info';
+import { toast } from 'react-toastify';
 
 const MyApplications = () => {
   const [applications, setApplications] = useState([]);
@@ -40,6 +41,10 @@ const MyApplications = () => {
       return;
     }
 
+    if (applications.find((a) => a._id === id).status !== 'under_review') {
+      return;
+    }
+
     const applicationReq = await fetch(`/api/applications/${id}`, {
       method: 'PUT',
       headers: {
@@ -69,6 +74,8 @@ const MyApplications = () => {
       ),
     );
     setError('');
+
+    toast.success('Application withdrawn successfully.');
   };
 
   return (
@@ -90,6 +97,9 @@ const MyApplications = () => {
                   <h3 className='truncate text-sm font-medium text-gray-900'>
                     {app.position}
                   </h3>
+                  <span className='inline-flex flex-shrink-0 items-center rounded-full bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-600/20'>
+                    {app.status.replace('_', ' ').toUpperCase()}
+                  </span>
                 </div>
                 <p className='mt-1 truncate text-sm text-gray-500'>
                   {app.company}
@@ -101,7 +111,11 @@ const MyApplications = () => {
                 <div className='flex w-0 flex-1'>
                   <button
                     onClick={() => withdrawApp(app._id)}
-                    className='relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900'>
+                    className={`${
+                      app.status !== 'under_review'
+                        ? 'bg-gray-100 cursor-not-allowed'
+                        : ''
+                    } relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900`}>
                     <XCircleIcon
                       className='h-5 w-5 text-gray-400'
                       aria-hidden='true'

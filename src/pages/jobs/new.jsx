@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { session as sessionAtom } from '../../lib/states/session';
 import { useRouter } from 'next/router';
 import { Error } from '../../lib/components/Error';
+import { toast } from 'react-toastify';
 
 const NewJob = () => {
   const [company, setCompanyName] = useState('');
@@ -42,6 +43,8 @@ const NewJob = () => {
 
       return;
     }
+
+    toast.success('Job posted successfully!');
 
     router.push('/jobs');
   };

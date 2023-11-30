@@ -1,5 +1,5 @@
-import { JobPost } from '../../../lib/models/jobpost';
-import { getUserIdFromToken } from '../../../lib/util/jwt';
+import { JobPost } from '../../../../lib/models/jobpost';
+import { getUserIdFromToken } from '../../../../lib/util/jwt';
 import { Application } from '../../../../lib/models/application';
 import { User } from '../../../../lib/models/user';
 
@@ -58,6 +58,8 @@ const handler = async (req, res) => {
       status: 'under_review',
       jobPostId,
       ownerId: id,
+      company: jobPost.company,
+      position: jobPost.position,
     });
 
     try {

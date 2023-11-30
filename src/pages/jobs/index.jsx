@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { EyeIcon, XCircleIcon } from '@heroicons/react/20/solid';
 import { Error } from '../../lib/components/Error';
 import { Info } from '../../lib/components/Info';
+import { toast } from 'react-toastify';
 
 const MyJobs = () => {
   const [jobs, setJobs] = useState([]);
@@ -58,6 +59,8 @@ const MyJobs = () => {
 
     setJobs(jobs.filter((job) => job._id !== id));
     setError('');
+
+    toast.success('Job post deleted successfully.');
   };
 
   return (
