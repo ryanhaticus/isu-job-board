@@ -5,6 +5,7 @@ import { search as searchAtom } from '../lib/states/search';
 import { PaperAirplaneIcon } from '@heroicons/react/20/solid';
 import { Info } from '../lib/components/Info';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
 
 const Index = () => {
   const [jobs, setJobs] = useState([]);
@@ -12,21 +13,10 @@ const Index = () => {
   const [session] = useAtom(sessionAtom);
 
   const [search] = useAtom(searchAtom);
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
-      const applicationsReq = await fetch('/api/me/applications', {
-        headers: {
-          Authorization: `Bearer ${session.token}`,
-        },
-      });
-
-      if (applicationsReq.status !== 200) {
-        return;
-      }
-
-      const applications = await applicationsReq.json();
-
       const jobsReq = await fetch('/api/jobposts', {
         headers: {
           Authorization: `Bearer ${session.token}`,
@@ -39,8 +29,22 @@ const Index = () => {
 
       const jobs = await jobsReq.json();
 
-      setApplications(applications);
+      const applicationsReq = await fetch('/api/me/applications', {
+        headers: {
+          Authorization: `Bearer ${session.token}`,
+        },
+      });
+
+      if (applicationsReq.status !== 200) {
+        setJobs(jobs);
+
+        return;
+      }
+
+      const applications = await applicationsReq.json();
+
       setJobs(jobs);
+      setApplications(applications);
     })();
   }, [session]);
 
@@ -108,7 +112,11 @@ const Index = () => {
               <div className='-mt-px flex divide-x divide-gray-200'>
                 <div className='flex w-0 flex-1'>
                   <button
-                    onClick={() => apply(job._id)}
+                    onClick={() =>
+                      Date.now() >= session.expires
+                        ? router.push('/auth/signin')
+                        : apply(job._id)
+                    }
                     className={`${
                       applications.find((a) => a.jobPostId === job._id)
                         ? 'bg-gray-100 cursor-not-allowed'
