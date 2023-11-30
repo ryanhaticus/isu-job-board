@@ -33,6 +33,10 @@ export default async function handler(req, res) {
     user.desiredPosition = profile.desiredPosition;
     user.salaryExpectation = profile.salaryExpectation;
 
+    if (profile.resume) {
+      user.resume = profile.resume;
+    }
+
     await user.save();
 
     res.status(200).json(user);

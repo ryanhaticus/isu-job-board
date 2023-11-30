@@ -8,12 +8,47 @@ import { toast } from 'react-toastify';
 const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
+  const [resumeFilename, setResumeFilename] = useState('');
+  const [resume, setResume] = useState(null);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [desiredPosition, setDesiredPosition] = useState('');
   const [salaryExpectation, setSalaryExpectation] = useState('');
   const [error, setError] = useState('');
   const [session] = useAtom(sessionAtom);
+
+  const handleResumeChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const base64 = await convertFileToBase64(file);
+      setResume(base64);
+    }
+  };
+
+  const openResume = () => {
+    if (!profile.resume) return;
+  
+    const byteCharacters = atob(profile.resume.split(',')[1]);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const file = new Blob([byteArray], { type: 'application/pdf' });
+  
+    const fileURL = URL.createObjectURL(file);
+  
+    window.open(fileURL, '_blank');
+  };
+  
+  const convertFileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => resolve(event.target.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
+  };
 
   useEffect(() => {
     (async () => {
@@ -39,6 +74,10 @@ const Profile = () => {
 
       const profile = await profileReq.json();
 
+      if (profile && profile.resume) {
+        setResumeFilename('Resume.pdf'); 
+      }
+
       setProfile(profile);
       setError('');
       setLoading(false);
@@ -47,35 +86,36 @@ const Profile = () => {
 
   const update = async (e) => {
     e.preventDefault();
-
+  
     const updatedProfile = {
       ...profile,
       firstName: firstName || profile.firstName,
       lastName: lastName || profile.lastName,
       desiredPosition: desiredPosition || profile.desiredPosition,
       salaryExpectation: salaryExpectation || profile.salaryExpectation,
+      resume: resume 
     };
-
-    const updateReq = await fetch('/api/me', {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${session.token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updatedProfile),
-    });
-
-    if (updateReq.status !== 200) {
-      const { message } = await updateReq.json();
-      setError(message);
-      return;
+  
+    try {
+      const response = await fetch('/api/me', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.token}`,
+        },
+        body: JSON.stringify(updatedProfile),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Profile update failed');
+      }
+      const updated = await response.json();
+      setProfile(updated);
+      setError('');
+      toast.success('Profile updated successfully.');
+    } catch (error) {
+      setError(error.message || 'An error occurred');
     }
-
-    const updated = await updateReq.json();
-
-    setProfile(updated);
-    setError('');
-    toast.success('Profile updated successfully.');
   };
 
   return (
@@ -191,6 +231,31 @@ const Profile = () => {
                   required
                   className='block w-full rounded-md border-0 py-1.5 pl-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                 />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor='resume' className='block text-sm font-medium leading-6 text-gray-900'>
+                Resume (PDF)
+              </label>
+              <div className='mt-2 flex items-center'>
+                <input
+                  type='file'
+                  id='resume'
+                  name='resume'
+                  accept='.pdf'
+                  onChange={handleResumeChange}
+                  className='block w-full text-sm text-gray-900 file:mr-4 file:py-1.5 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100'
+                />
+                {resumeFilename && (
+                  <button
+                    type='button'
+                    onClick={openResume}
+                    className='ml-2 text-indigo-600 hover:text-indigo-800 text-sm'
+                  >
+                    {resumeFilename}
+                  </button>
+                )}
               </div>
             </div>
 
