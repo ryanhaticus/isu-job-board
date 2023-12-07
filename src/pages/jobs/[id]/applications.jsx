@@ -6,6 +6,7 @@ import { session as sessionAtom } from '../../../lib/states/session';
 import { Error } from '../../../lib/components/Error';
 import { Info } from '../../../lib/components/Info';
 import { toast } from 'react-toastify';
+import { downloadBase64Resume } from '../../../lib/util/file';
 
 const SpecificJobApplicants = () => {
   const router = useRouter();
@@ -163,6 +164,11 @@ const SpecificJobApplicants = () => {
               <th
                 scope='col'
                 className='hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell'>
+                Resume
+              </th>
+              <th
+                scope='col'
+                className='hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell'>
                 Application Status
               </th>
               <th scope='col' className='relative py-3.5 pl-3 pr-4 sm:pr-0'>
@@ -181,6 +187,21 @@ const SpecificJobApplicants = () => {
                 </td>
                 <td className='hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell'>
                   ${app.user.salaryExpectation}
+                </td>
+                <td className='hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell'>
+                  {app.user.resume ? (
+                    <button
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      onClick={() => {
+                        downloadBase64Resume(app.user.resume);
+                      }}
+                      className='text-indigo-600 hover:text-indigo-500'>
+                      Download Resume
+                    </button>
+                  ) : (
+                    'No resume uploaded'
+                  )}
                 </td>
                 <td className='hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell'>
                   <span className='inline-flex flex-shrink-0 items-center rounded-full bg-gray-50 px-3 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-600/20'>

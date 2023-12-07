@@ -44,7 +44,7 @@ const navigation = [
     accessType: 'AUTHENTICATED',
   },
   {
-    name: 'Post a Job',
+    name: 'Post a New Job',
     href: '/jobs/new',
     icon: PlusCircleIcon,
     accessType: 'AUTHENTICATED',
@@ -65,8 +65,8 @@ const navigation = [
     name: 'Developer Info',
     href: '/studentinfo',
     icon: UsersIcon,
-    accessType: 'ALL'
-  }
+    accessType: 'ALL',
+  },
 ];
 
 const userNavigation = [

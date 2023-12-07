@@ -17,11 +17,11 @@ export const usePageTitle = () => {
     case '/profile':
       return 'My Profile';
     case '/jobs':
-      return 'All Jobs';
+      return 'My Jobs';
     case '/jobs/new':
-      return 'New Job';
+      return 'Post a New Job';
     case '/studentinfo':
-      return 'Student Info'
+      return 'Student Info';
   }
 
   if (router.pathname.startsWith('/jobs/')) {

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Error } from '../lib/components/Error';
 import { Info } from '../lib/components/Info';
 import { toast } from 'react-toastify';
+import { downloadBase64Resume } from '../lib/util/file';
 
 const Profile = () => {
   const [loading, setLoading] = useState(true);
@@ -27,20 +28,10 @@ const Profile = () => {
 
   const openResume = () => {
     if (!profile.resume) return;
-  
-    const byteCharacters = atob(profile.resume.split(',')[1]);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    const file = new Blob([byteArray], { type: 'application/pdf' });
-  
-    const fileURL = URL.createObjectURL(file);
-  
-    window.open(fileURL, '_blank');
+
+    downloadBase64Resume(profile.resume);
   };
-  
+
   const convertFileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -75,7 +66,7 @@ const Profile = () => {
       const profile = await profileReq.json();
 
       if (profile && profile.resume) {
-        setResumeFilename('Resume.pdf'); 
+        setResumeFilename('Resume.pdf');
       }
 
       setProfile(profile);
@@ -86,16 +77,16 @@ const Profile = () => {
 
   const update = async (e) => {
     e.preventDefault();
-  
+
     const updatedProfile = {
       ...profile,
       firstName: firstName || profile.firstName,
       lastName: lastName || profile.lastName,
       desiredPosition: desiredPosition || profile.desiredPosition,
       salaryExpectation: salaryExpectation || profile.salaryExpectation,
-      resume: resume 
+      resume: resume,
     };
-  
+
     try {
       const response = await fetch('/api/me', {
         method: 'PUT',
@@ -105,7 +96,7 @@ const Profile = () => {
         },
         body: JSON.stringify(updatedProfile),
       });
-  
+
       if (!response.ok) {
         throw new Error('Profile update failed');
       }
@@ -235,7 +226,9 @@ const Profile = () => {
             </div>
 
             <div>
-              <label htmlFor='resume' className='block text-sm font-medium leading-6 text-gray-900'>
+              <label
+                htmlFor='resume'
+                className='block text-sm font-medium leading-6 text-gray-900'>
                 Resume (PDF)
               </label>
               <div className='mt-2 flex items-center'>
@@ -251,8 +244,7 @@ const Profile = () => {
                   <button
                     type='button'
                     onClick={openResume}
-                    className='ml-2 text-indigo-600 hover:text-indigo-800 text-sm'
-                  >
+                    className='ml-2 text-indigo-600 hover:text-indigo-800 text-sm'>
                     {resumeFilename}
                   </button>
                 )}
